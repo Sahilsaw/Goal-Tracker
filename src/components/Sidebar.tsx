@@ -1,10 +1,11 @@
 import { ProgressRing } from './ProgressRing'
 import { MiniCalendar } from './MiniCalendar'
 import { ThemeToggle } from './ThemeToggle'
+import { NotesSection } from './NotesSection'
 import { getBadges } from '../lib/badges'
 import { getCurrentStreak, getBestStreak } from '../lib/streaks'
 import { getTotalXP, getWeekSummary } from '../lib/stats'
-import type { GoalsByDate } from '../types'
+import type { GoalsByDate, NoteFile } from '../types'
 import './Sidebar.css'
 
 interface SidebarProps {
@@ -15,6 +16,12 @@ interface SidebarProps {
   currentDateKey: string
   onDateSelect: (dateKey: string) => void
   isOpen?: boolean
+  // Notes props
+  notes: string
+  noteFiles: NoteFile[]
+  onUpdateNotes: (text: string) => void
+  onAddFile: (file: File) => Promise<void>
+  onRemoveFile: (fileId: string) => Promise<void>
 }
 
 export function Sidebar({
@@ -25,6 +32,11 @@ export function Sidebar({
   currentDateKey,
   onDateSelect,
   isOpen,
+  notes,
+  noteFiles,
+  onUpdateNotes,
+  onAddFile,
+  onRemoveFile,
 }: SidebarProps) {
   const currentStreak = getCurrentStreak(goals)
   const bestStreak = getBestStreak(goals)
@@ -91,6 +103,16 @@ export function Sidebar({
           currentDateKey={currentDateKey}
           goals={goals}
           onDateSelect={onDateSelect}
+        />
+      </div>
+
+      <div className="sidebar-section">
+        <NotesSection
+          notes={notes}
+          noteFiles={noteFiles}
+          onUpdateNotes={onUpdateNotes}
+          onAddFile={onAddFile}
+          onRemoveFile={onRemoveFile}
         />
       </div>
     </aside>

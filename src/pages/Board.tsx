@@ -41,6 +41,9 @@ export function Board() {
     addSubtask,
     toggleSubtask,
     removeSubtask,
+    updateNotes,
+    addNoteFile,
+    removeNoteFile,
     loading, 
     error 
   } = useGoals(slug ?? null)
@@ -121,6 +124,27 @@ export function Board() {
     setSidebarOpen(false)
   }, [])
 
+  const handleUpdateNotes = useCallback(
+    (text: string) => {
+      updateNotes(dateKey, text)
+    },
+    [dateKey, updateNotes]
+  )
+
+  const handleAddFile = useCallback(
+    async (file: File) => {
+      await addNoteFile(dateKey, file)
+    },
+    [dateKey, addNoteFile]
+  )
+
+  const handleRemoveFile = useCallback(
+    async (fileId: string) => {
+      await removeNoteFile(dateKey, fileId)
+    },
+    [dateKey, removeNoteFile]
+  )
+
   if (loading) {
     return (
       <div className="board-layout">
@@ -170,6 +194,11 @@ export function Board() {
         currentDateKey={dateKey}
         onDateSelect={handleDateSelect}
         isOpen={sidebarOpen}
+        notes={dayGoal.notes ?? ''}
+        noteFiles={dayGoal.noteFiles ?? []}
+        onUpdateNotes={handleUpdateNotes}
+        onAddFile={handleAddFile}
+        onRemoveFile={handleRemoveFile}
       />
 
       <main className="board-main">

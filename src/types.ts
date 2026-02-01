@@ -33,11 +33,21 @@ export interface DevItem {
   done: boolean
 }
 
+export interface NoteFile {
+  id: string
+  name: string
+  url: string
+  type: string
+  uploadedAt: string
+}
+
 export interface DayGoal {
   date: string
   videos: VideoItem[]
   dsa: DsaItem[]
   dev: DevItem[]
+  notes?: string
+  noteFiles?: NoteFile[]
 }
 
 export type GoalsByDate = Record<string, DayGoal>

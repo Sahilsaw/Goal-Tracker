@@ -1,0 +1,198 @@
+.notes-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.notes-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.notes-section-toggle {
+  font-size: 0.65rem;
+  color: var(--text-muted, #888);
+}
+
+.notes-section-content {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notes-textarea-wrap {
+  position: relative;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg, #f5f5f5);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 0.2s ease;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: var(--progress-fill, #0d6efd);
+}
+
+.notes-textarea::placeholder {
+  color: var(--text-muted, #888);
+}
+
+.notes-save-status {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.notes-save-status.saving {
+  color: var(--text-muted, #888);
+  background: var(--card-bg, #fff);
+}
+
+.notes-save-status.saved {
+  color: #059669;
+  background: #d1fae5;
+}
+
+.notes-files-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--bg, #f5f5f5);
+  border: 2px dashed var(--border, #ddd);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.notes-files-area.drag-over {
+  border-color: var(--progress-fill, #0d6efd);
+  background: var(--progress-bg, #e7f1ff);
+}
+
+.notes-files-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.notes-file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--card-bg, #fff);
+  border-radius: 6px;
+}
+
+.notes-file-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.notes-file-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+  color: var(--progress-fill, #0d6efd);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notes-file-name:hover {
+  text-decoration: underline;
+}
+
+.notes-file-remove {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted, #888);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.notes-file-item:hover .notes-file-remove {
+  opacity: 1;
+}
+
+.notes-file-remove:hover {
+  background: var(--hover-bg, #eee);
+  color: var(--text);
+}
+
+.notes-upload-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.notes-file-input {
+  display: none;
+}
+
+.notes-upload-btn {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--progress-fill, #0d6efd);
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notes-upload-btn:hover:not(:disabled) {
+  background: var(--progress-bg, #e7f1ff);
+  border-color: var(--progress-fill, #0d6efd);
+}
+
+.notes-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notes-upload-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted, #888);
+}

@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import type { DayGoal, GoalsByDate, SectionKind, DsaItem, Subtask, Difficulty, DsaPlatform } from '../types'
+import { uploadFile, deleteFile } from '../lib/storage'
+import type { DayGoal, GoalsByDate, SectionKind, DsaItem, Subtask, Difficulty, DsaPlatform, NoteFile } from '../types'
 
 function emptyDayGoal(date: string): DayGoal {
-  return { date, videos: [], dsa: [], dev: [] }
+  return { date, videos: [], dsa: [], dev: [], notes: '', noteFiles: [] }
 }
 
 function getOrCreateDay(goals: GoalsByDate, date: string): DayGoal {
@@ -14,6 +15,8 @@ function getOrCreateDay(goals: GoalsByDate, date: string): DayGoal {
       videos: [...existing.videos],
       dsa: [...existing.dsa.map(d => ({ ...d }))],
       dev: [...existing.dev.map(d => ({ ...d, subtasks: d.subtasks ? [...d.subtasks] : [] }))],
+      notes: existing.notes ?? '',
+      noteFiles: existing.noteFiles ? [...existing.noteFiles] : [],
     }
   return emptyDayGoal(date)
 }
@@ -207,6 +210,64 @@ export function useGoals(slug: string | null) {
     [goals, updateDay]
   )
 
+  // Notes methods
+  const updateNotes = useCallback(
+    (date: string, text: string) => {
+      const day = getOrCreateDay(goals, date)
+      day.notes = text
+      updateDay(date, { ...day })
+    },
+    [goals, updateDay]
+  )
+
+  const addNoteFile = useCallback(
+    async (date: string, file: File): Promise<void> => {
+      if (!slug) return
+      
+      try {
+        const { url, path } = await uploadFile(slug, date, file)
+        const newFile: NoteFile = {
+          id: generateId(),
+          name: file.name,
+          url,
+          type: file.type,
+          uploadedAt: new Date().toISOString(),
+        }
+        // Store the path in the id for deletion later
+        newFile.id = path
+        
+        const day = getOrCreateDay(goals, date)
+        day.noteFiles = [...(day.noteFiles || []), newFile]
+        updateDay(date, { ...day })
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Failed to upload file')
+        throw e
+      }
+    },
+    [goals, updateDay, slug]
+  )
+
+  const removeNoteFile = useCallback(
+    async (date: string, fileId: string): Promise<void> => {
+      const day = getOrCreateDay(goals, date)
+      const fileToRemove = day.noteFiles?.find((f) => f.id === fileId)
+      
+      if (fileToRemove) {
+        try {
+          // fileId is the storage path
+          await deleteFile(fileId)
+        } catch (e) {
+          console.warn('Failed to delete file from storage:', e)
+          // Continue anyway to remove from state
+        }
+      }
+      
+      day.noteFiles = (day.noteFiles || []).filter((f) => f.id !== fileId)
+      updateDay(date, { ...day })
+    },
+    [goals, updateDay]
+  )
+
   return { 
     goals, 
     getDayGoal, 
@@ -218,6 +279,9 @@ export function useGoals(slug: string | null) {
     addSubtask,
     toggleSubtask,
     removeSubtask,
+    updateNotes,
+    addNoteFile,
+    removeNoteFile,
     loading, 
     error 
   }
