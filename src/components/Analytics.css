@@ -1,0 +1,146 @@
+.analytics-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.analytics-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.analytics-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.analytics-toggle {
+  font-size: 0.65rem;
+  color: var(--text-muted, #888);
+}
+
+.analytics-content {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.analytics-card {
+  padding: 0.75rem;
+  background: var(--bg, #f5f5f5);
+  border-radius: 10px;
+}
+
+.analytics-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.analytics-card-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted, #666);
+}
+
+.analytics-card-value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Weekly Chart */
+.weekly-chart {
+  width: 100%;
+  height: 100px;
+}
+
+/* Stats Row */
+.analytics-stats-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.analytics-mini-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.6rem 0.4rem;
+  background: var(--bg, #f5f5f5);
+  border-radius: 8px;
+}
+
+.analytics-mini-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.analytics-mini-label {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: var(--text-muted, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+/* Category Pie */
+.category-pie {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.category-pie > div:first-child {
+  width: 100%;
+  height: 80px;
+}
+
+.category-pie-empty {
+  padding: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted, #888);
+}
+
+.category-legend {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.category-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.category-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Time Card */
+.analytics-time-card .analytics-time-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted, #666);
+}

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ProgressRing } from './ProgressRing'
 import { MiniCalendar } from './MiniCalendar'
 import { ThemeToggle } from './ThemeToggle'
@@ -96,6 +97,12 @@ export function Sidebar({
           </div>
         </div>
       )}
+
+      <div className="sidebar-section">
+        <Link to={`/g/${slug}/analytics`} className="sidebar-analytics-link">
+          View Analytics
+        </Link>
+      </div>
 
       <div className="sidebar-section sidebar-calendar-section">
         <h3 className="sidebar-section-title">Calendar</h3>
