@@ -1,0 +1,119 @@
+.board-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg, #f5f5f5);
+}
+
+.board-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+.board-header {
+  margin-bottom: 1.5rem;
+}
+
+.board-content {
+  flex: 1;
+}
+
+.board-loading,
+.board-error {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.board-error p {
+  color: #c00;
+}
+
+/* Mobile menu button */
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--card-bg, #fff);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.mobile-menu-icon {
+  display: block;
+  width: 20px;
+  height: 2px;
+  margin: 0 auto;
+  background: var(--text, #1a1a1a);
+  position: relative;
+}
+
+.mobile-menu-icon::before,
+.mobile-menu-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 2px;
+  background: var(--text, #1a1a1a);
+}
+
+.mobile-menu-icon::before {
+  top: -6px;
+}
+
+.mobile-menu-icon::after {
+  top: 6px;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 99;
+}
+
+@media (max-width: 900px) {
+  .board-main {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .board-main {
+    padding: 4.5rem 1rem 1.5rem;
+  }
+
+  .board-layout .sidebar {
+    left: -300px;
+  }
+
+  .board-layout .sidebar.open {
+    left: 0;
+  }
+}

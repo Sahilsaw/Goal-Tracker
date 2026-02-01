@@ -1,0 +1,51 @@
+.badges-wrap {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.badges-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted, #666);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.badges-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text, #1a1a1a);
+  padding: 0.25rem 0.5rem;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border, #e8e8e8);
+  border-radius: 6px;
+}
+
+.badge-item.badge-new {
+  border-color: var(--progress-fill, #0d6efd);
+  background: var(--progress-bg, #e7f1ff);
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--progress-fill, #0d6efd);
+}
+
+.badge-new-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--progress-fill, #0d6efd);
+  margin-left: 0.15rem;
+}

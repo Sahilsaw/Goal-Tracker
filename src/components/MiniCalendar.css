@@ -1,0 +1,81 @@
+.mini-calendar {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: var(--card-bg, #fff);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.mini-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 0.35rem;
+}
+
+.mini-calendar-weekday {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted, #666);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.mini-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.mini-calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text, #1a1a1a);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mini-calendar-day.pad {
+  cursor: default;
+  visibility: hidden;
+}
+
+.mini-calendar-day:hover:not(.pad) {
+  background: var(--hover-bg, #f0f0f0);
+}
+
+.mini-calendar-day.selected {
+  background: var(--progress-fill, #0d6efd);
+  color: #fff;
+}
+
+.mini-calendar-day.today:not(.selected) {
+  border: 1px solid var(--progress-fill, #0d6efd);
+}
+
+.mini-calendar-day.has-data:not(.selected)::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-muted, #888);
+}
+
+.mini-calendar-day.complete.has-data:not(.selected)::after {
+  background: var(--progress-fill, #0d6efd);
+}
+
+.mini-calendar-day {
+  position: relative;
+}

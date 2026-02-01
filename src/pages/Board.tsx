@@ -1,0 +1,194 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { DayGoalView } from '../components/DayGoalView'
+import { DateNavigator } from '../components/DateNavigator'
+import { Sidebar } from '../components/Sidebar'
+import { useGoals } from '../hooks/useGoals'
+import { isDayCompleted } from '../lib/streaks'
+import { fireDayCompleteCelebration } from '../lib/celebration'
+import type { SectionKind, DsaItem, Difficulty, DsaPlatform } from '../types'
+import '../App.css'
+import './Board.css'
+
+function formatTodayKey(): string {
+  const d = new Date()
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+function dayDoneTotal(dayGoal: { videos: { done: boolean }[]; dsa: { done: boolean }[]; dev: { done: boolean }[] }) {
+  const done =
+    dayGoal.videos.filter((v) => v.done).length +
+    dayGoal.dsa.filter((d) => d.done).length +
+    dayGoal.dev.filter((d) => d.done).length
+  const total = dayGoal.videos.length + dayGoal.dsa.length + dayGoal.dev.length
+  return { done, total }
+}
+
+export function Board() {
+  const { slug } = useParams<{ slug: string }>()
+  const [dateKey, setDateKey] = useState(formatTodayKey)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { 
+    goals, 
+    getDayGoal, 
+    addItem, 
+    toggleDone, 
+    removeItem,
+    updateDsaItem,
+    addSubtask,
+    toggleSubtask,
+    removeSubtask,
+    loading, 
+    error 
+  } = useGoals(slug ?? null)
+  const dayGoal = getDayGoal(dateKey)
+  const { done: dayDone, total: dayTotal } = dayDoneTotal(dayGoal)
+  const wasDayCompleteRef = useRef<boolean | null>(null)
+
+  useEffect(() => {
+    const nowComplete = isDayCompleted(dayGoal)
+    if (wasDayCompleteRef.current === null) {
+      wasDayCompleteRef.current = nowComplete
+      return
+    }
+    if (nowComplete && !wasDayCompleteRef.current && dayTotal > 0) {
+      fireDayCompleteCelebration()
+    }
+    wasDayCompleteRef.current = nowComplete
+  }, [dayGoal, dayTotal])
+
+  const handleAdd = useCallback(
+    (kind: SectionKind, payload: { 
+      title: string
+      url?: string
+      link?: string
+      platform?: DsaPlatform
+      difficulty?: Difficulty
+      notes?: string
+    }) => {
+      addItem(dateKey, kind, payload)
+    },
+    [dateKey, addItem]
+  )
+
+  const handleToggle = useCallback(
+    (kind: SectionKind, id: string) => {
+      toggleDone(dateKey, kind, id)
+    },
+    [dateKey, toggleDone]
+  )
+
+  const handleRemove = useCallback(
+    (kind: SectionKind, id: string) => {
+      removeItem(dateKey, kind, id)
+    },
+    [dateKey, removeItem]
+  )
+
+  const handleUpdateDsa = useCallback(
+    (id: string, updates: Partial<DsaItem>) => {
+      updateDsaItem(dateKey, id, updates)
+    },
+    [dateKey, updateDsaItem]
+  )
+
+  const handleAddSubtask = useCallback(
+    (devItemId: string, title: string) => {
+      addSubtask(dateKey, devItemId, title)
+    },
+    [dateKey, addSubtask]
+  )
+
+  const handleToggleSubtask = useCallback(
+    (devItemId: string, subtaskId: string) => {
+      toggleSubtask(dateKey, devItemId, subtaskId)
+    },
+    [dateKey, toggleSubtask]
+  )
+
+  const handleRemoveSubtask = useCallback(
+    (devItemId: string, subtaskId: string) => {
+      removeSubtask(dateKey, devItemId, subtaskId)
+    },
+    [dateKey, removeSubtask]
+  )
+
+  const handleDateSelect = useCallback((newDate: string) => {
+    setDateKey(newDate)
+    setSidebarOpen(false)
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="board-layout">
+        <div className="board-loading">
+          <p>Loading board…</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="board-layout">
+        <div className="board-error">
+          <p>{error}</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="board-layout">
+      {/* Mobile menu button */}
+      <button
+        type="button"
+        className="mobile-menu-btn"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Toggle sidebar"
+      >
+        <span className="mobile-menu-icon" />
+      </button>
+
+      {/* Overlay for mobile */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden
+        />
+      )}
+
+      <Sidebar
+        goals={goals}
+        slug={slug ?? null}
+        dayDone={dayDone}
+        dayTotal={dayTotal}
+        currentDateKey={dateKey}
+        onDateSelect={handleDateSelect}
+        isOpen={sidebarOpen}
+      />
+
+      <main className="board-main">
+        <header className="board-header">
+          <DateNavigator currentDateKey={dateKey} onDateChange={setDateKey} />
+        </header>
+        <div className="board-content">
+          <DayGoalView
+            dayGoal={dayGoal}
+            onToggle={handleToggle}
+            onRemove={handleRemove}
+            onAdd={handleAdd}
+            onUpdateDsa={handleUpdateDsa}
+            onAddSubtask={handleAddSubtask}
+            onToggleSubtask={handleToggleSubtask}
+            onRemoveSubtask={handleRemoveSubtask}
+          />
+        </div>
+      </main>
+    </div>
+  )
+}
