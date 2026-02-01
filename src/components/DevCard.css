@@ -198,3 +198,55 @@
 .dev-subtask-add-btn:hover {
   background: #0b5ed7;
 }
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .dev-card {
+    padding: 0.6rem;
+  }
+
+  .dev-card-main {
+    gap: 0.5rem;
+  }
+
+  .dev-title {
+    font-size: 0.85rem;
+  }
+
+  .dev-subtask-count {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.35rem;
+  }
+
+  .dev-link {
+    font-size: 0.7rem;
+  }
+
+  .dev-subtasks-section {
+    margin-left: 1.25rem;
+    padding-left: 0.5rem;
+  }
+
+  .dev-subtask-label {
+    font-size: 0.8rem;
+  }
+
+  .dev-subtask-checkbox {
+    width: 12px;
+    height: 12px;
+  }
+
+  .dev-subtask-remove {
+    opacity: 1;
+  }
+
+  .dev-subtask-input {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.4rem;
+  }
+
+  .dev-subtask-add-btn {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}

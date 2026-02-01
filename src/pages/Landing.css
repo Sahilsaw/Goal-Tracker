@@ -93,12 +93,30 @@
 }
 
 @media (max-width: 500px) {
+  .landing {
+    padding: 1.5rem 1rem;
+  }
+
+  .landing-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+  }
+
+  .landing-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
   .landing-features {
+    flex-direction: column;
     gap: 0.75rem;
   }
 
   .landing-feature {
+    flex-direction: row;
     padding: 0.75rem 1rem;
+    width: 100%;
   }
 
   .landing h1 {
@@ -106,6 +124,35 @@
   }
 
   .landing p {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .create-board-btn {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .landing h1 {
+    font-size: 1.25rem;
+  }
+
+  .landing p {
+    font-size: 0.85rem;
+  }
+
+  .landing-feature {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .landing-feature-icon {
+    font-size: 1.25rem;
+  }
+
+  .landing-feature span:last-child {
+    font-size: 0.8rem;
   }
 }

@@ -196,3 +196,37 @@
   font-size: 0.7rem;
   color: var(--text-muted, #888);
 }
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .notes-textarea {
+    min-height: 60px;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .notes-files-area {
+    padding: 0.5rem;
+  }
+
+  .notes-file-item {
+    padding: 0.25rem 0.4rem;
+  }
+
+  .notes-file-name {
+    font-size: 0.75rem;
+  }
+
+  .notes-file-icon {
+    font-size: 0.8rem;
+  }
+
+  .notes-upload-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .notes-upload-hint {
+    font-size: 0.65rem;
+  }
+}

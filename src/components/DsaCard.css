@@ -216,3 +216,54 @@
 .dsa-notes-input::placeholder {
   color: var(--text-muted, #888);
 }
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .dsa-card {
+    padding: 0.6rem;
+  }
+
+  .dsa-card-main {
+    gap: 0.5rem;
+  }
+
+  .dsa-card-header {
+    gap: 0.3rem;
+  }
+
+  .dsa-platform-badge,
+  .dsa-difficulty-badge {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.6rem;
+  }
+
+  .dsa-time-badge {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.35rem;
+  }
+
+  .dsa-title {
+    font-size: 0.85rem;
+  }
+
+  .dsa-link {
+    font-size: 0.7rem;
+  }
+
+  .dsa-form-row {
+    flex-direction: column;
+  }
+
+  .dsa-difficulty-select {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 400px) {
+  .dsa-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
