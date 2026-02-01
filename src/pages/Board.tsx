@@ -6,6 +6,7 @@ import { Sidebar } from '../components/Sidebar'
 import { useGoals } from '../hooks/useGoals'
 import { isDayCompleted } from '../lib/streaks'
 import { fireDayCompleteCelebration } from '../lib/celebration'
+import { isPastDate } from '../lib/integrity'
 import type { SectionKind, DsaItem, Difficulty, DsaPlatform } from '../types'
 import '../App.css'
 import './Board.css'
@@ -204,10 +205,17 @@ export function Board() {
       <main className="board-main">
         <header className="board-header">
           <DateNavigator currentDateKey={dateKey} onDateChange={setDateKey} />
+          {isPastDate(dateKey) && (
+            <div className="past-date-warning" role="alert">
+              <span className="past-date-warning-icon">⚠️</span>
+              <span>You're viewing a past date. Changes will be marked as late completions.</span>
+            </div>
+          )}
         </header>
         <div className="board-content">
           <DayGoalView
             dayGoal={dayGoal}
+            dateKey={dateKey}
             onToggle={handleToggle}
             onRemove={handleRemove}
             onAdd={handleAdd}

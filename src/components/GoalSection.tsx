@@ -4,6 +4,7 @@ import type { SectionKind } from '../types'
 import { DsaCard } from './DsaCard'
 import { DevCard } from './DevCard'
 import { detectPlatform } from '../lib/platforms'
+import { isLateCompletion, getDaysLate, formatCompletionDate } from '../lib/integrity'
 import './GoalSection.css'
 
 type Item = VideoItem | DsaItem | DevItem
@@ -12,6 +13,7 @@ interface GoalSectionProps {
   title: string
   kind: SectionKind
   items: Item[]
+  dateKey: string  // For integrity tracking
   doneCount: number
   totalCount: number
   onToggle: (id: string) => void
@@ -51,12 +53,24 @@ function getYouTubeThumbnail(videoId: string): string {
   return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
 }
 
-function VideoCard({ item, onToggle, onRemove }: { item: VideoItem; onToggle: () => void; onRemove: () => void }) {
+function VideoCard({ 
+  item, 
+  dateKey,
+  onToggle, 
+  onRemove 
+}: { 
+  item: VideoItem
+  dateKey: string
+  onToggle: () => void
+  onRemove: () => void 
+}) {
   const videoId = getYouTubeVideoId(item.url)
   const thumbnail = videoId ? getYouTubeThumbnail(videoId) : null
+  const isLate = item.done && isLateCompletion(dateKey, item.completedAt)
+  const daysLate = isLate ? getDaysLate(dateKey, item.completedAt) : 0
 
   return (
-    <li className={`video-card ${item.done ? 'done' : ''}`}>
+    <li className={`video-card ${item.done ? 'done' : ''} ${isLate ? 'late' : ''}`}>
       {thumbnail ? (
         <a href={item.url} target="_blank" rel="noopener noreferrer" className="video-thumbnail-link">
           <img src={thumbnail} alt={item.title} className="video-thumbnail" loading="lazy" />
@@ -71,6 +85,14 @@ function VideoCard({ item, onToggle, onRemove }: { item: VideoItem; onToggle: ()
         <label className="video-label">
           <input type="checkbox" checked={item.done} onChange={onToggle} className="goal-checkbox" aria-label={`Mark ${item.title} complete`} />
           <span className="video-title">{item.title}</span>
+          {isLate && (
+            <span 
+              className="late-badge" 
+              title={`Completed ${formatCompletionDate(item.completedAt!)} (${daysLate} day${daysLate > 1 ? 's' : ''} late)`}
+            >
+              ⏰ Late
+            </span>
+          )}
         </label>
         {item.url && (
           <a href={item.url} target="_blank" rel="noopener noreferrer" className="video-url">
@@ -87,6 +109,7 @@ export function GoalSection({
   title,
   kind,
   items,
+  dateKey,
   doneCount,
   totalCount,
   onToggle,
@@ -147,7 +170,13 @@ export function GoalSection({
       {kind === 'videos' && (
         <ul className="video-list">
           {(items as VideoItem[]).map((item) => (
-            <VideoCard key={item.id} item={item} onToggle={() => onToggle(item.id)} onRemove={() => onRemove(item.id)} />
+            <VideoCard 
+              key={item.id} 
+              item={item} 
+              dateKey={dateKey}
+              onToggle={() => onToggle(item.id)} 
+              onRemove={() => onRemove(item.id)} 
+            />
           ))}
         </ul>
       )}
@@ -158,6 +187,7 @@ export function GoalSection({
             <DsaCard
               key={item.id}
               item={item}
+              dateKey={dateKey}
               onToggle={() => onToggle(item.id)}
               onRemove={() => onRemove(item.id)}
               onUpdate={(updates) => onUpdateDsa?.(item.id, updates)}
@@ -172,6 +202,7 @@ export function GoalSection({
             <DevCard
               key={item.id}
               item={item}
+              dateKey={dateKey}
               onToggle={() => onToggle(item.id)}
               onRemove={() => onRemove(item.id)}
               onAddSubtask={(subtaskTitle) => onAddSubtask?.(item.id, subtaskTitle)}

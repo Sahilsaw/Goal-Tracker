@@ -9,6 +9,7 @@ import {
   getDsaTimeStats, 
   getTotalStats,
   getWeeklyComparison,
+  getIntegrityStats,
   formatTime 
 } from '../lib/analytics'
 import './AnalyticsPage.css'
@@ -39,6 +40,7 @@ export function AnalyticsPage() {
   const timeStats = getDsaTimeStats(goals)
   const totalStats = getTotalStats(goals)
   const comparison = getWeeklyComparison(goals)
+  const integrityStats = getIntegrityStats(goals)
 
   const thisWeekCompleted = weeklyData.reduce((sum, d) => sum + d.completed, 0)
   const lastWeekData = twoWeekData.slice(0, 7)
@@ -315,6 +317,56 @@ export function AnalyticsPage() {
             )}
           </div>
         </div>
+
+        {/* Integrity Stats */}
+        {integrityStats.totalCompleted > 0 && (
+          <div className="analytics-card integrity-card">
+            <h2 className="analytics-card-title">Completion Integrity</h2>
+            <div className="integrity-content">
+              <div className="integrity-stat-row">
+                <div className="integrity-stat">
+                  <div className="integrity-stat-header">
+                    <span className="integrity-stat-value">{integrityStats.onTimeRate}%</span>
+                    <span className={`integrity-status ${integrityStats.onTimeRate >= 80 ? 'good' : integrityStats.onTimeRate >= 50 ? 'okay' : 'needs-work'}`}>
+                      {integrityStats.onTimeRate >= 80 ? '✓ Great' : integrityStats.onTimeRate >= 50 ? '○ Okay' : '! Needs Work'}
+                    </span>
+                  </div>
+                  <span className="integrity-stat-label">On-Time Completion</span>
+                  <div className="integrity-bar">
+                    <div 
+                      className="integrity-bar-fill on-time" 
+                      style={{ width: `${integrityStats.onTimeRate}%` }}
+                    />
+                  </div>
+                  <span className="integrity-stat-detail">
+                    {integrityStats.onTimeCount} on time, {integrityStats.lateCount} late
+                  </span>
+                </div>
+
+                {(integrityStats.dsaWithTime > 0 || integrityStats.dsaWithoutTime > 0) && (
+                  <div className="integrity-stat">
+                    <div className="integrity-stat-header">
+                      <span className="integrity-stat-value">{integrityStats.dsaTimeLoggedRate}%</span>
+                      <span className={`integrity-status ${integrityStats.dsaTimeLoggedRate >= 70 ? 'good' : integrityStats.dsaTimeLoggedRate >= 40 ? 'okay' : 'needs-work'}`}>
+                        {integrityStats.dsaTimeLoggedRate >= 70 ? '✓ Verified' : integrityStats.dsaTimeLoggedRate >= 40 ? '○ Partial' : '! Unverified'}
+                      </span>
+                    </div>
+                    <span className="integrity-stat-label">DSA Time Logged</span>
+                    <div className="integrity-bar">
+                      <div 
+                        className="integrity-bar-fill verified" 
+                        style={{ width: `${integrityStats.dsaTimeLoggedRate}%` }}
+                      />
+                    </div>
+                    <span className="integrity-stat-detail">
+                      {integrityStats.dsaWithTime} with time, {integrityStats.dsaWithoutTime} without
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   )

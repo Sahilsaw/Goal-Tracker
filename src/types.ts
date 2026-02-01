@@ -3,6 +3,7 @@ export interface VideoItem {
   title: string
   url: string
   done: boolean
+  completedAt?: string  // ISO timestamp when marked done
 }
 
 export type DsaPlatform = 'leetcode' | 'hackerrank' | 'codeforces' | 'gfg' | 'other'
@@ -17,6 +18,7 @@ export interface DsaItem {
   notes?: string
   timeSpentMinutes?: number
   done: boolean
+  completedAt?: string  // ISO timestamp when marked done
 }
 
 export interface Subtask {
@@ -31,6 +33,7 @@ export interface DevItem {
   link?: string
   subtasks?: Subtask[]
   done: boolean
+  completedAt?: string  // ISO timestamp when marked done
 }
 
 export interface NoteFile {

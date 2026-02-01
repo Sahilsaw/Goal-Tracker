@@ -127,12 +127,38 @@ export function useGoals(slug: string | null) {
   const toggleDone = useCallback(
     (date: string, kind: SectionKind, id: string) => {
       const day = getOrCreateDay(goals, date)
+      const now = new Date().toISOString()
+      
       if (kind === 'videos') {
-        day.videos = day.videos.map((v) => (v.id === id ? { ...v, done: !v.done } : v))
+        day.videos = day.videos.map((v) => {
+          if (v.id !== id) return v
+          const newDone = !v.done
+          return { 
+            ...v, 
+            done: newDone,
+            completedAt: newDone ? now : undefined
+          }
+        })
       } else if (kind === 'dsa') {
-        day.dsa = day.dsa.map((d) => (d.id === id ? { ...d, done: !d.done } : d))
+        day.dsa = day.dsa.map((d) => {
+          if (d.id !== id) return d
+          const newDone = !d.done
+          return { 
+            ...d, 
+            done: newDone,
+            completedAt: newDone ? now : undefined
+          }
+        })
       } else {
-        day.dev = day.dev.map((d) => (d.id === id ? { ...d, done: !d.done } : d))
+        day.dev = day.dev.map((d) => {
+          if (d.id !== id) return d
+          const newDone = !d.done
+          return { 
+            ...d, 
+            done: newDone,
+            completedAt: newDone ? now : undefined
+          }
+        })
       }
       updateDay(date, { ...day })
     },
@@ -181,6 +207,8 @@ export function useGoals(slug: string | null) {
   const toggleSubtask = useCallback(
     (date: string, devItemId: string, subtaskId: string) => {
       const day = getOrCreateDay(goals, date)
+      const now = new Date().toISOString()
+      
       day.dev = day.dev.map((d) => {
         if (d.id !== devItemId) return d
         const updatedSubtasks = (d.subtasks || []).map((s) =>
@@ -188,7 +216,14 @@ export function useGoals(slug: string | null) {
         )
         // Auto-complete parent if all subtasks are done
         const allDone = updatedSubtasks.length > 0 && updatedSubtasks.every((s) => s.done)
-        return { ...d, subtasks: updatedSubtasks, done: allDone }
+        const wasDone = d.done
+        return { 
+          ...d, 
+          subtasks: updatedSubtasks, 
+          done: allDone,
+          // Set completedAt when auto-completed, clear if uncompleted
+          completedAt: allDone && !wasDone ? now : (allDone ? d.completedAt : undefined)
+        }
       })
       updateDay(date, { ...day })
     },

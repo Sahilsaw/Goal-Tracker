@@ -1,19 +1,34 @@
 import { useState } from 'react'
 import type { DsaItem } from '../types'
 import { getPlatformName, getPlatformColor, getDifficultyColor, getDifficultyLabel } from '../lib/platforms'
+import { isLateCompletion, getDaysLate, formatCompletionDate } from '../lib/integrity'
 import './DsaCard.css'
 
 interface DsaCardProps {
   item: DsaItem
+  dateKey: string
   onToggle: () => void
   onRemove: () => void
   onUpdate: (updates: Partial<DsaItem>) => void
 }
 
-export function DsaCard({ item, onToggle, onRemove, onUpdate }: DsaCardProps) {
+export function DsaCard({ item, dateKey, onToggle, onRemove, onUpdate }: DsaCardProps) {
   const [showNotes, setShowNotes] = useState(false)
   const [showTimeInput, setShowTimeInput] = useState(false)
+  const [showTimePrompt, setShowTimePrompt] = useState(false)
   const [timeInput, setTimeInput] = useState(item.timeSpentMinutes?.toString() || '')
+  
+  const isLate = item.done && isLateCompletion(dateKey, item.completedAt)
+  const daysLate = isLate ? getDaysLate(dateKey, item.completedAt) : 0
+  const hasNoTimeLogged = item.done && (item.timeSpentMinutes === undefined || item.timeSpentMinutes === 0)
+
+  const handleToggleWithPrompt = () => {
+    // If marking as done and no time logged, show prompt
+    if (!item.done && (item.timeSpentMinutes === undefined || item.timeSpentMinutes === 0)) {
+      setShowTimePrompt(true)
+    }
+    onToggle()
+  }
 
   const handleTimeSubmit = () => {
     const minutes = parseInt(timeInput, 10)
@@ -21,16 +36,21 @@ export function DsaCard({ item, onToggle, onRemove, onUpdate }: DsaCardProps) {
       onUpdate({ timeSpentMinutes: minutes })
     }
     setShowTimeInput(false)
+    setShowTimePrompt(false)
+  }
+
+  const handleSkipTimePrompt = () => {
+    setShowTimePrompt(false)
   }
 
   return (
-    <li className={`dsa-card ${item.done ? 'done' : ''}`}>
+    <li className={`dsa-card ${item.done ? 'done' : ''} ${isLate ? 'late' : ''}`}>
       <div className="dsa-card-main">
         <label className="dsa-checkbox-label">
           <input
             type="checkbox"
             checked={item.done}
-            onChange={onToggle}
+            onChange={handleToggleWithPrompt}
             className="goal-checkbox"
             aria-label={`Mark ${item.title} complete`}
           />
@@ -55,8 +75,21 @@ export function DsaCard({ item, onToggle, onRemove, onUpdate }: DsaCardProps) {
               </span>
             )}
             {item.timeSpentMinutes !== undefined && item.timeSpentMinutes > 0 && (
-              <span className="dsa-time-badge">
-                {item.timeSpentMinutes} min
+              <span className="dsa-time-badge dsa-time-verified" title="Time logged - verified">
+                ✓ {item.timeSpentMinutes} min
+              </span>
+            )}
+            {hasNoTimeLogged && (
+              <span className="dsa-time-badge dsa-time-unverified" title="No time logged">
+                No time
+              </span>
+            )}
+            {isLate && (
+              <span 
+                className="late-badge" 
+                title={`Completed ${formatCompletionDate(item.completedAt!)} (${daysLate} day${daysLate > 1 ? 's' : ''} late)`}
+              >
+                ⏰ Late
               </span>
             )}
           </div>
@@ -129,6 +162,30 @@ export function DsaCard({ item, onToggle, onRemove, onUpdate }: DsaCardProps) {
           </button>
         </div>
       </div>
+      
+      {/* Time prompt shown after marking complete */}
+      {showTimePrompt && item.done && (
+        <div className="dsa-time-prompt">
+          <span className="dsa-time-prompt-text">How long did this take?</span>
+          <div className="dsa-time-prompt-actions">
+            <input
+              type="number"
+              value={timeInput}
+              onChange={(e) => setTimeInput(e.target.value)}
+              placeholder="minutes"
+              className="dsa-time-prompt-input"
+              min="0"
+              autoFocus
+            />
+            <button type="button" onClick={handleTimeSubmit} className="dsa-time-prompt-save">
+              Save
+            </button>
+            <button type="button" onClick={handleSkipTimePrompt} className="dsa-time-prompt-skip">
+              Skip
+            </button>
+          </div>
+        </div>
+      )}
     </li>
   )
 }

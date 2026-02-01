@@ -268,6 +268,45 @@
   font-size: 0.9rem;
 }
 
+/* Late Completion Indicator */
+.late-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #b45309;
+  background: #fef3c7;
+  border-radius: 4px;
+  cursor: help;
+  white-space: nowrap;
+}
+
+.video-card.late,
+.dsa-card.late,
+.dev-card.late {
+  border-left: 3px solid #f59e0b;
+}
+
+/* Past Date Warning Banner */
+.past-date-warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: #92400e;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-radius: 8px;
+}
+
+.past-date-warning-icon {
+  font-size: 1rem;
+}
+
 /* Mobile Responsive Styles */
 @media (max-width: 600px) {
   .date-navigator {

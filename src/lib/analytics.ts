@@ -299,3 +299,96 @@ export function getWeeklyComparison(goals: GoalsByDate): WeeklyComparison {
     },
   }
 }
+
+export interface IntegrityStats {
+  totalCompleted: number
+  onTimeCount: number
+  lateCount: number
+  onTimeRate: number
+  dsaWithTime: number
+  dsaWithoutTime: number
+  dsaTimeLoggedRate: number
+}
+
+/**
+ * Check if a task completion was on time (same day as assigned date)
+ */
+function isOnTimeCompletion(assignedDate: string, completedAt?: string): boolean {
+  if (!completedAt) return true  // Assume on time if no timestamp (legacy data)
+  
+  const assigned = new Date(assignedDate + 'T00:00:00')
+  const completed = new Date(completedAt)
+  
+  const assignedDay = new Date(assigned.getFullYear(), assigned.getMonth(), assigned.getDate())
+  const completedDay = new Date(completed.getFullYear(), completed.getMonth(), completed.getDate())
+  
+  return completedDay.getTime() <= assignedDay.getTime()
+}
+
+/**
+ * Get integrity statistics for completed tasks
+ */
+export function getIntegrityStats(goals: GoalsByDate): IntegrityStats {
+  let totalCompleted = 0
+  let onTimeCount = 0
+  let lateCount = 0
+  let dsaWithTime = 0
+  let dsaWithoutTime = 0
+
+  for (const [dateKey, day] of Object.entries(goals)) {
+    // Videos
+    for (const video of day.videos) {
+      if (video.done) {
+        totalCompleted++
+        if (isOnTimeCompletion(dateKey, video.completedAt)) {
+          onTimeCount++
+        } else {
+          lateCount++
+        }
+      }
+    }
+    
+    // DSA
+    for (const dsa of day.dsa) {
+      if (dsa.done) {
+        totalCompleted++
+        if (isOnTimeCompletion(dateKey, dsa.completedAt)) {
+          onTimeCount++
+        } else {
+          lateCount++
+        }
+        
+        // Track time logging
+        if (dsa.timeSpentMinutes && dsa.timeSpentMinutes > 0) {
+          dsaWithTime++
+        } else {
+          dsaWithoutTime++
+        }
+      }
+    }
+    
+    // Dev
+    for (const dev of day.dev) {
+      if (dev.done) {
+        totalCompleted++
+        if (isOnTimeCompletion(dateKey, dev.completedAt)) {
+          onTimeCount++
+        } else {
+          lateCount++
+        }
+      }
+    }
+  }
+
+  const dsaTotal = dsaWithTime + dsaWithoutTime
+
+  return {
+    totalCompleted,
+    onTimeCount,
+    lateCount,
+    onTimeRate: totalCompleted > 0 ? Math.round((onTimeCount / totalCompleted) * 100) : 100,
+    dsaWithTime,
+    dsaWithoutTime,
+    dsaTimeLoggedRate: dsaTotal > 0 ? Math.round((dsaWithTime / dsaTotal) * 100) : 0,
+  }
+}

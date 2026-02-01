@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import type { DevItem } from '../types'
+import { isLateCompletion, getDaysLate, formatCompletionDate } from '../lib/integrity'
 import './DevCard.css'
 
 interface DevCardProps {
   item: DevItem
+  dateKey: string
   onToggle: () => void
   onRemove: () => void
   onAddSubtask: (title: string) => void
@@ -13,6 +15,7 @@ interface DevCardProps {
 
 export function DevCard({
   item,
+  dateKey,
   onToggle,
   onRemove,
   onAddSubtask,
@@ -25,6 +28,9 @@ export function DevCard({
   const subtasks = item.subtasks || []
   const completedSubtasks = subtasks.filter((s) => s.done).length
   const hasSubtasks = subtasks.length > 0
+  
+  const isLate = item.done && isLateCompletion(dateKey, item.completedAt)
+  const daysLate = isLate ? getDaysLate(dateKey, item.completedAt) : 0
 
   const handleAddSubtask = (e: React.FormEvent) => {
     e.preventDefault()
@@ -35,7 +41,7 @@ export function DevCard({
   }
 
   return (
-    <li className={`dev-card ${item.done ? 'done' : ''}`}>
+    <li className={`dev-card ${item.done ? 'done' : ''} ${isLate ? 'late' : ''}`}>
       <div className="dev-card-main">
         <label className="dev-checkbox-label">
           <input
@@ -53,6 +59,14 @@ export function DevCard({
             {hasSubtasks && (
               <span className="dev-subtask-count">
                 {completedSubtasks}/{subtasks.length}
+              </span>
+            )}
+            {isLate && (
+              <span 
+                className="late-badge" 
+                title={`Completed ${formatCompletionDate(item.completedAt!)} (${daysLate} day${daysLate > 1 ? 's' : ''} late)`}
+              >
+                ⏰ Late
               </span>
             )}
           </div>

@@ -3,6 +3,7 @@ import type { DayGoal, SectionKind, DsaItem, Difficulty, DsaPlatform } from '../
 
 interface DayGoalViewProps {
   dayGoal: DayGoal
+  dateKey: string  // The assigned date for integrity tracking
   onToggle: (kind: SectionKind, id: string) => void
   onRemove: (kind: SectionKind, id: string) => void
   onAdd: (
@@ -26,6 +27,7 @@ interface DayGoalViewProps {
 
 export function DayGoalView({ 
   dayGoal, 
+  dateKey,
   onToggle, 
   onRemove, 
   onAdd,
@@ -52,6 +54,7 @@ export function DayGoalView({
         title="Videos"
         kind="videos"
         items={dayGoal.videos}
+        dateKey={dateKey}
         doneCount={videosDone}
         totalCount={dayGoal.videos.length}
         onToggle={(id) => onToggle('videos', id)}
@@ -62,6 +65,7 @@ export function DayGoalView({
         title="DSA Questions"
         kind="dsa"
         items={dayGoal.dsa}
+        dateKey={dateKey}
         doneCount={dsaDone}
         totalCount={dayGoal.dsa.length}
         onToggle={(id) => onToggle('dsa', id)}
@@ -73,6 +77,7 @@ export function DayGoalView({
         title="Dev Tasks"
         kind="dev"
         items={dayGoal.dev}
+        dateKey={dateKey}
         doneCount={devDone}
         totalCount={dayGoal.dev.length}
         onToggle={(id) => onToggle('dev', id)}
