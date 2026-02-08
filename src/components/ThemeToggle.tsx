@@ -3,12 +3,24 @@ import './ThemeToggle.css'
 
 const STORAGE_KEY = 'goal-tracker-theme'
 
-type Theme = 'light' | 'dark'
+type Theme = 'light' | 'dark' | 'jjk'
+
+const THEMES: Theme[] = ['light', 'dark', 'jjk']
+const THEME_LABELS: Record<Theme, string> = {
+  light: 'Light',
+  dark: 'Dark',
+  jjk: 'JJK'
+}
+const THEME_ICONS: Record<Theme, string> = {
+  light: '☀️',
+  dark: '🌙',
+  jjk: '⚡'
+}
 
 function getStoredTheme(): Theme {
   try {
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
-    if (stored === 'dark' || stored === 'light') return stored
+    if (stored === 'dark' || stored === 'light' || stored === 'jjk') return stored
   } catch {
     /* ignore */
   }
@@ -31,17 +43,26 @@ export function ThemeToggle() {
     }
   }, [theme])
 
-  const toggle = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'))
+  const cycleTheme = () => {
+    setTheme((current) => {
+      const currentIndex = THEMES.indexOf(current)
+      const nextIndex = (currentIndex + 1) % THEMES.length
+      return THEMES[nextIndex]
+    })
+  }
+
+  const nextTheme = THEMES[(THEMES.indexOf(theme) + 1) % THEMES.length]
 
   return (
     <button
       type="button"
-      className="theme-toggle"
-      onClick={toggle}
-      aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-      title={theme === 'light' ? 'Dark mode' : 'Light mode'}
+      className={`theme-toggle theme-toggle-${theme}`}
+      onClick={cycleTheme}
+      aria-label={`Switch to ${THEME_LABELS[nextTheme]} mode`}
+      title={`Current: ${THEME_LABELS[theme]} — Click for ${THEME_LABELS[nextTheme]}`}
     >
-      {theme === 'light' ? 'Dark' : 'Light'}
+      <span className="theme-toggle-icon">{THEME_ICONS[theme]}</span>
+      <span className="theme-toggle-label">{THEME_LABELS[theme]}</span>
     </button>
   )
 }

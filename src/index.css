@@ -23,6 +23,89 @@
   --progress-fill: #5b9cff;
 }
 
+/* JJK Cursed Energy Theme */
+[data-theme="jjk"] {
+  --bg: #0a0a0f;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --card-bg: #12121a;
+  --border: #2d2d3a;
+  --hover-bg: #1a1a25;
+  --input-bg: #0f0f18;
+  --progress-bg: #1e1e2e;
+  --progress-fill: #8b5cf6;
+  
+  /* JJK-specific colors */
+  --cursed-purple: #6366f1;
+  --cursed-violet: #8b5cf6;
+  --domain-cyan: #22d3ee;
+  --sukuna-red: #ef4444;
+  --glow-purple: rgba(139, 92, 246, 0.3);
+  
+  /* Quote styling */
+  --quote-bg-start: rgba(99, 102, 241, 0.15);
+  --quote-bg-end: rgba(139, 92, 246, 0.15);
+  --quote-border: rgba(139, 92, 246, 0.3);
+  --quote-glow: rgba(139, 92, 246, 0.2);
+  --quote-accent: #a78bfa;
+  --quote-btn-bg: rgba(139, 92, 246, 0.15);
+  --quote-btn-border: rgba(139, 92, 246, 0.3);
+  --quote-btn-hover: rgba(139, 92, 246, 0.25);
+}
+
+/* JJK Theme enhancements */
+[data-theme="jjk"] body {
+  background: 
+    radial-gradient(ellipse at 20% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    var(--bg);
+}
+
+[data-theme="jjk"] .goal-section,
+[data-theme="jjk"] .date-navigator,
+[data-theme="jjk"] .analytics-card {
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(99, 102, 241, 0.05);
+  border: 1px solid var(--border);
+}
+
+[data-theme="jjk"] .goal-section:hover,
+[data-theme="jjk"] .analytics-card:hover {
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="jjk"] .progress-ring-fill {
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.5));
+}
+
+[data-theme="jjk"] .today-badge {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+[data-theme="jjk"] .nav-btn:hover {
+  border-color: var(--cursed-violet);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+}
+
+[data-theme="jjk"] input[type="checkbox"]:checked {
+  background-color: var(--cursed-violet);
+  border-color: var(--cursed-violet);
+}
+
+[data-theme="jjk"] .sidebar {
+  background: linear-gradient(180deg, var(--card-bg) 0%, #0d0d14 100%);
+  border-right: 1px solid var(--border);
+}
+
+[data-theme="jjk"] .badge {
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
 :root {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
