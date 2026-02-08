@@ -136,9 +136,6 @@ export function AnimeCelebration({ visible, onClose }: AnimeCelebrationProps) {
           </div>
         </div>
         
-        <div className="anime-celebration-attribution">
-          Powered by GIPHY
-        </div>
       </div>
     </div>
   )
