@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom'
 import { DayGoalView } from '../components/DayGoalView'
 import { DateNavigator } from '../components/DateNavigator'
 import { Sidebar } from '../components/Sidebar'
+import { AnimeCelebration } from '../components/AnimeCelebration'
 import { useGoals } from '../hooks/useGoals'
 import { isDayCompleted } from '../lib/streaks'
-import { fireDayCompleteCelebration } from '../lib/celebration'
+import { fireDayCompleteCelebration, shouldUseAnimeCelebration } from '../lib/celebration'
 import { isPastDate } from '../lib/integrity'
 import type { SectionKind, DsaItem, Difficulty, DsaPlatform } from '../types'
 import '../App.css'
@@ -51,6 +52,7 @@ export function Board() {
   const dayGoal = getDayGoal(dateKey)
   const { done: dayDone, total: dayTotal } = dayDoneTotal(dayGoal)
   const wasDayCompleteRef = useRef<boolean | null>(null)
+  const [showAnimeCelebration, setShowAnimeCelebration] = useState(false)
 
   useEffect(() => {
     const nowComplete = isDayCompleted(dayGoal)
@@ -59,10 +61,19 @@ export function Board() {
       return
     }
     if (nowComplete && !wasDayCompleteRef.current && dayTotal > 0) {
-      fireDayCompleteCelebration()
+      // Check if anime celebration is available, otherwise use confetti
+      if (shouldUseAnimeCelebration()) {
+        setShowAnimeCelebration(true)
+      } else {
+        fireDayCompleteCelebration()
+      }
     }
     wasDayCompleteRef.current = nowComplete
   }, [dayGoal, dayTotal])
+
+  const handleCloseCelebration = useCallback(() => {
+    setShowAnimeCelebration(false)
+  }, [])
 
   const handleAdd = useCallback(
     (kind: SectionKind, payload: { 
@@ -226,6 +237,12 @@ export function Board() {
           />
         </div>
       </main>
+
+      {/* Anime celebration popup */}
+      <AnimeCelebration 
+        visible={showAnimeCelebration} 
+        onClose={handleCloseCelebration} 
+      />
     </div>
   )
 }
