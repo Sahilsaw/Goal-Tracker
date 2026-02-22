@@ -1,24 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { HabitItem } from '../types'
 import './HabitsSection.css'
 
 const EMOJI_SUGGESTIONS = ['💪', '🏃', '📚', '🧘', '💧', '🥗', '😴', '✍️', '🎯', '⏰']
 
+const BASE_URL = import.meta.env.BASE_URL
+
 const ANIME_CHARACTERS = [
-  { name: 'Asta', quote: '"My magic is never gup."', color: '#4a5568' },
-  { name: 'Naruto', quote: '"Hard work beats talent."', color: '#ed8936' },
-  { name: 'Deku', quote: '"I have to work harder."', color: '#48bb78' },
-  { name: 'Luffy', quote: '"Take risks, create a future."', color: '#e53e3e' },
-  { name: 'Eren', quote: '"If you don\'t fight, you can\'t win."', color: '#667eea' },
-  { name: 'Vegeta', quote: '"Push through the pain."', color: '#3182ce' },
-  { name: 'Levi', quote: '"Make a choice you won\'t regret."', color: '#718096' },
+  { id: 'asta', name: 'Asta', quote: 'My magic is never giving up!', color: '#4a5568', image: `${BASE_URL}characters/asta.jpg` },
+  { id: 'naruto', name: 'Naruto', quote: 'Hard work beats talent.', color: '#ed8936', image: `${BASE_URL}characters/naruto.jpg` },
+  { id: 'deku', name: 'Deku', quote: 'I have to work harder than anyone else.', color: '#48bb78', image: `${BASE_URL}characters/deku.jpg` },
+  { id: 'luffy', name: 'Luffy', quote: 'Take risks, create a future.', color: '#e53e3e', image: `${BASE_URL}characters/luffy.jpg` },
+  { id: 'eren', name: 'Eren', quote: "If you don't fight, you can't win.", color: '#667eea', image: `${BASE_URL}characters/eren.jpg` },
+  { id: 'vegeta', name: 'Vegeta', quote: 'Push through the pain.', color: '#3182ce', image: `${BASE_URL}characters/vegeta.jpg` },
+  { id: 'levi', name: 'Levi', quote: "Make a choice you won't regret.", color: '#718096', image: `${BASE_URL}characters/levi.jpg` },
 ]
 
-const BOTTOM_QUOTES = [
-  { text: 'Surpass your limits. Right here. Right now.', character: 'Yami' },
-  { text: "If you don't fight, you can't win.", character: 'Eren' },
-  { text: 'Push through the pain. Giving up hurts more.', character: 'Vegeta' },
-]
+const STORAGE_KEY = 'training-arc-mentor'
+
+function getStoredMentor(): string {
+  if (typeof window === 'undefined') return 'naruto'
+  return localStorage.getItem(STORAGE_KEY) || 'naruto'
+}
 
 interface HabitsSectionProps {
   habits: HabitItem[]
@@ -28,9 +31,16 @@ interface HabitsSectionProps {
 }
 
 export function HabitsSection({ habits, onToggle, onRemove, onAdd }: HabitsSectionProps) {
+  const [selectedMentor, setSelectedMentor] = useState(getStoredMentor)
   const [isAdding, setIsAdding] = useState(false)
   const [newTitle, setNewTitle] = useState('')
   const [selectedEmoji, setSelectedEmoji] = useState<string | undefined>(undefined)
+
+  const mentor = ANIME_CHARACTERS.find(c => c.id === selectedMentor) || ANIME_CHARACTERS[1]
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, selectedMentor)
+  }, [selectedMentor])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -53,25 +63,45 @@ export function HabitsSection({ habits, onToggle, onRemove, onAdd }: HabitsSecti
   const totalCount = habits.length
 
   return (
-    <div className="training-arc">
-      {/* Anime Characters Header */}
-      <div className="training-arc-characters">
-        {ANIME_CHARACTERS.map((char) => (
-          <div key={char.name} className="character-card" style={{ '--char-color': char.color } as React.CSSProperties}>
-            <div className="character-avatar">
-              <span className="character-initial">{char.name[0]}</span>
-            </div>
-            <p className="character-quote">{char.quote}</p>
-            <p className="character-name">— {char.name}</p>
-          </div>
-        ))}
+    <div 
+      className="training-arc" 
+      style={{ '--mentor-color': mentor.color } as React.CSSProperties}
+    >
+      {/* Mentor Selector */}
+      <div className="mentor-section">
+        <p className="mentor-label">Choose Your Training Mentor</p>
+        <div className="mentor-selector">
+          {ANIME_CHARACTERS.map((char) => (
+            <button
+              key={char.id}
+              type="button"
+              className={`mentor-avatar ${selectedMentor === char.id ? 'selected' : ''}`}
+              onClick={() => setSelectedMentor(char.id)}
+              title={char.name}
+              style={{ '--char-color': char.color } as React.CSSProperties}
+            >
+              <img src={char.image} alt={char.name} />
+              {selectedMentor === char.id && <span className="mentor-check">✓</span>}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Selected Mentor Quote */}
+      <div className="mentor-quote-card">
+        <div className="mentor-quote-avatar">
+          <img src={mentor.image} alt={mentor.name} />
+        </div>
+        <div className="mentor-quote-content">
+          <p className="mentor-quote-text">"{mentor.quote}"</p>
+          <p className="mentor-quote-name">— {mentor.name}, your mentor</p>
+        </div>
       </div>
 
       {/* Title Section */}
       <div className="training-arc-header">
         <h2 className="training-arc-title">TRAINING ARC</h2>
-        <p className="training-arc-subtitle">30-DAY HABIT TRACKER</p>
-        <p className="training-arc-motto">"THIS ISN'T A BAD PHASE. IT'S MY TRAINING ARC."</p>
+        <p className="training-arc-motto">This isn't a bad phase. It's my training arc.</p>
       </div>
 
       {/* Progress Bar */}
@@ -82,7 +112,7 @@ export function HabitsSection({ habits, onToggle, onRemove, onAdd }: HabitsSecti
             style={{ width: totalCount > 0 ? `${(completedCount / totalCount) * 100}%` : '0%' }}
           />
         </div>
-        <span className="progress-text">{completedCount}/{totalCount} completed</span>
+        <span className="progress-text">{completedCount}/{totalCount}</span>
       </div>
 
       {/* Habits Grid */}
@@ -131,7 +161,7 @@ export function HabitsSection({ habits, onToggle, onRemove, onAdd }: HabitsSecti
           className="add-habit-btn"
           onClick={() => setIsAdding(true)}
         >
-          + Add Custom Habit
+          + Add Habit
         </button>
       ) : (
         <form className="add-habit-form" onSubmit={handleSubmit}>
@@ -165,15 +195,6 @@ export function HabitsSection({ habits, onToggle, onRemove, onAdd }: HabitsSecti
           </div>
         </form>
       )}
-
-      {/* Bottom Quotes */}
-      <div className="training-arc-quotes">
-        {BOTTOM_QUOTES.map((q, i) => (
-          <p key={i} className="bottom-quote">
-            "{q.text}" <span className="quote-author">— {q.character}</span>
-          </p>
-        ))}
-      </div>
     </div>
   )
 }

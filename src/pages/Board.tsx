@@ -4,7 +4,6 @@ import { DayGoalView } from '../components/DayGoalView'
 import { DateNavigator } from '../components/DateNavigator'
 import { Sidebar } from '../components/Sidebar'
 import { AnimeCelebration } from '../components/AnimeCelebration'
-import { DailyQuote } from '../components/DailyQuote'
 import { useGoals } from '../hooks/useGoals'
 import { isDayCompleted } from '../lib/streaks'
 import { fireDayCompleteCelebration, shouldUseAnimeCelebration } from '../lib/celebration'
@@ -242,7 +241,6 @@ export function Board() {
 
       <main className="board-main">
         <header className="board-header">
-          <DailyQuote />
           <DateNavigator currentDateKey={dateKey} onDateChange={setDateKey} />
           {isPastDate(dateKey) && (
             <div className="past-date-warning" role="alert">

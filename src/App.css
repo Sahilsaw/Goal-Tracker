@@ -61,11 +61,24 @@
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.2s ease;
+  border: 1px solid var(--border, #e0e0e0);
+  transition: all 0.2s ease;
 }
 
 .goal-section:hover {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Dark theme: stronger card visibility */
+[data-theme="dark"] .goal-section {
+  background: #252525;
+  border-color: #3a3a3a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .goal-section:hover {
+  border-color: #4a4a4a;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .section-title {
@@ -256,6 +269,7 @@
   background: var(--card-bg, #fff);
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border, #e0e0e0);
 }
 
 .day-empty p {
@@ -266,6 +280,12 @@
 .day-empty-hint {
   margin-top: 0.5rem !important;
   font-size: 0.9rem;
+}
+
+[data-theme="dark"] .day-empty {
+  background: #252525;
+  border-color: #3a3a3a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Late Completion Indicator */
