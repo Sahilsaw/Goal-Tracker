@@ -1,0 +1,599 @@
+.training-arc {
+  background: linear-gradient(180deg, #f5e6d3 0%, #ede0d4 50%, #e6d5c3 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.training-arc::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 10% 90%, rgba(255, 182, 193, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(255, 182, 193, 0.3) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+/* Anime Characters Header */
+.training-arc-characters {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.character-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem;
+  background: linear-gradient(180deg, var(--char-color) 0%, color-mix(in srgb, var(--char-color) 70%, black) 100%);
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.character-card:hover {
+  transform: translateY(-2px);
+}
+
+.character-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.4rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.character-initial {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.character-quote {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 0.25rem;
+  line-height: 1.3;
+  font-style: italic;
+}
+
+.character-name {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Title Section */
+.training-arc-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.training-arc-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #2d3748;
+  margin: 0;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+}
+
+.training-arc-subtitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin: 0.25rem 0 0;
+  letter-spacing: 0.2em;
+}
+
+.training-arc-motto {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #553c2e;
+  margin: 1rem 0 0;
+  font-weight: 500;
+}
+
+/* Progress Bar */
+.training-arc-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2d3748;
+  white-space: nowrap;
+}
+
+/* Habits Grid */
+.training-arc-habits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.habit-checkbox-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.habit-checkbox-card:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.habit-checkbox-card.completed {
+  background: rgba(72, 187, 120, 0.2);
+  border-color: rgba(72, 187, 120, 0.4);
+}
+
+.habit-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #718096;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.habit-checkbox-card.completed .habit-checkbox {
+  background: #48bb78;
+  border-color: #48bb78;
+}
+
+.checkmark {
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.habit-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #2d3748;
+  flex: 1;
+  min-width: 0;
+}
+
+.habit-icon {
+  font-size: 1rem;
+}
+
+.habit-delete {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #a0aec0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.habit-checkbox-card:hover .habit-delete {
+  opacity: 1;
+}
+
+.habit-delete:hover {
+  background: #e53e3e;
+  border-color: #e53e3e;
+  color: white;
+}
+
+/* Add Habit */
+.add-habit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px dashed rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  color: #4a5568;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.add-habit-btn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+.add-habit-form {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.emoji-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.emoji-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.emoji-btn:hover {
+  transform: scale(1.1);
+}
+
+.emoji-btn.selected {
+  background: #667eea;
+  border-color: #667eea;
+  transform: scale(1.1);
+}
+
+.add-habit-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.habit-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  color: #2d3748;
+}
+
+.habit-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.habit-input::placeholder {
+  color: #a0aec0;
+}
+
+.save-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+  background: #48bb78;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  color: #a0aec0;
+  background: transparent;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #fed7d7;
+  border-color: #fc8181;
+  color: #e53e3e;
+}
+
+/* Bottom Quotes */
+.training-arc-quotes {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.bottom-quote {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: #553c2e;
+  margin: 0.5rem 0;
+  line-height: 1.4;
+}
+
+.quote-author {
+  font-style: normal;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+/* Dark Theme Override */
+[data-theme="dark"] .training-arc,
+[data-theme="jjk"] .training-arc {
+  background: linear-gradient(180deg, #1a1625 0%, #0d0b14 100%);
+}
+
+[data-theme="dark"] .training-arc::before,
+[data-theme="jjk"] .training-arc::before {
+  background-image: 
+    radial-gradient(circle at 10% 90%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+}
+
+[data-theme="dark"] .training-arc-title,
+[data-theme="jjk"] .training-arc-title {
+  color: #f0e6ff;
+  text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+[data-theme="dark"] .training-arc-subtitle,
+[data-theme="jjk"] .training-arc-subtitle {
+  color: #a78bfa;
+}
+
+[data-theme="dark"] .training-arc-motto,
+[data-theme="jjk"] .training-arc-motto {
+  color: #c4b5fd;
+}
+
+[data-theme="dark"] .progress-bar,
+[data-theme="jjk"] .progress-bar {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="dark"] .progress-fill,
+[data-theme="jjk"] .progress-fill {
+  background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%);
+}
+
+[data-theme="dark"] .progress-text,
+[data-theme="jjk"] .progress-text {
+  color: #e9d5ff;
+}
+
+[data-theme="dark"] .habit-checkbox-card,
+[data-theme="jjk"] .habit-checkbox-card {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+[data-theme="dark"] .habit-checkbox-card:hover,
+[data-theme="jjk"] .habit-checkbox-card:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="dark"] .habit-checkbox-card.completed,
+[data-theme="jjk"] .habit-checkbox-card.completed {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+[data-theme="dark"] .habit-checkbox,
+[data-theme="jjk"] .habit-checkbox {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: #6b7280;
+}
+
+[data-theme="dark"] .habit-checkbox-card.completed .habit-checkbox,
+[data-theme="jjk"] .habit-checkbox-card.completed .habit-checkbox {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+[data-theme="dark"] .habit-label,
+[data-theme="jjk"] .habit-label {
+  color: #e9d5ff;
+}
+
+[data-theme="dark"] .add-habit-btn,
+[data-theme="jjk"] .add-habit-btn {
+  background: rgba(139, 92, 246, 0.1);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+}
+
+[data-theme="dark"] .add-habit-btn:hover,
+[data-theme="jjk"] .add-habit-btn:hover {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+[data-theme="dark"] .add-habit-form,
+[data-theme="jjk"] .add-habit-form {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+[data-theme="dark"] .habit-input,
+[data-theme="jjk"] .habit-input {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #e9d5ff;
+}
+
+[data-theme="dark"] .emoji-btn,
+[data-theme="jjk"] .emoji-btn {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+[data-theme="dark"] .emoji-btn.selected,
+[data-theme="jjk"] .emoji-btn.selected {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+}
+
+[data-theme="dark"] .save-btn,
+[data-theme="jjk"] .save-btn {
+  background: #8b5cf6;
+}
+
+[data-theme="dark"] .habit-delete,
+[data-theme="jjk"] .habit-delete {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #a78bfa;
+}
+
+[data-theme="dark"] .training-arc-quotes,
+[data-theme="jjk"] .training-arc-quotes {
+  border-top-color: rgba(139, 92, 246, 0.2);
+}
+
+[data-theme="dark"] .bottom-quote,
+[data-theme="jjk"] .bottom-quote {
+  color: #c4b5fd;
+}
+
+[data-theme="dark"] .quote-author,
+[data-theme="jjk"] .quote-author {
+  color: #a78bfa;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .training-arc {
+    padding: 1rem;
+  }
+
+  .training-arc-characters {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .character-card:nth-child(n+5) {
+    display: none;
+  }
+
+  .character-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .character-initial {
+    font-size: 1rem;
+  }
+
+  .character-quote {
+    display: none;
+  }
+
+  .training-arc-title {
+    font-size: 1.5rem;
+  }
+
+  .training-arc-habits {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .training-arc-characters {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .character-card:nth-child(n+4) {
+    display: none;
+  }
+
+  .training-arc-title {
+    font-size: 1.25rem;
+  }
+
+  .training-arc-subtitle {
+    font-size: 0.7rem;
+  }
+
+  .training-arc-motto {
+    font-size: 0.8rem;
+  }
+
+  .training-arc-habits {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-quote {
+    font-size: 0.75rem;
+  }
+}

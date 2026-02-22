@@ -44,11 +44,20 @@ export interface NoteFile {
   uploadedAt: string
 }
 
+export interface HabitItem {
+  id: string
+  title: string
+  icon?: string
+  done: boolean
+  completedAt?: string
+}
+
 export interface DayGoal {
   date: string
   videos: VideoItem[]
   dsa: DsaItem[]
   dev: DevItem[]
+  habits: HabitItem[]
   notes?: string
   noteFiles?: NoteFile[]
 }

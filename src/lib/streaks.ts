@@ -1,14 +1,17 @@
 import type { DayGoal, GoalsByDate } from '../types'
 
 function totalTasks(day: DayGoal): number {
-  return day.videos.length + day.dsa.length + day.dev.length
+  const habits = day.habits || []
+  return day.videos.length + day.dsa.length + day.dev.length + habits.length
 }
 
 function doneTasks(day: DayGoal): number {
+  const habits = day.habits || []
   return (
     day.videos.filter((v) => v.done).length +
     day.dsa.filter((d) => d.done).length +
-    day.dev.filter((d) => d.done).length
+    day.dev.filter((d) => d.done).length +
+    habits.filter((h) => h.done).length
   )
 }
 

@@ -21,12 +21,14 @@ function formatTodayKey(): string {
   return `${y}-${m}-${day}`
 }
 
-function dayDoneTotal(dayGoal: { videos: { done: boolean }[]; dsa: { done: boolean }[]; dev: { done: boolean }[] }) {
+function dayDoneTotal(dayGoal: { videos: { done: boolean }[]; dsa: { done: boolean }[]; dev: { done: boolean }[]; habits?: { done: boolean }[] }) {
+  const habits = dayGoal.habits || []
   const done =
     dayGoal.videos.filter((v) => v.done).length +
     dayGoal.dsa.filter((d) => d.done).length +
-    dayGoal.dev.filter((d) => d.done).length
-  const total = dayGoal.videos.length + dayGoal.dsa.length + dayGoal.dev.length
+    dayGoal.dev.filter((d) => d.done).length +
+    habits.filter((h) => h.done).length
+  const total = dayGoal.videos.length + dayGoal.dsa.length + dayGoal.dev.length + habits.length
   return { done, total }
 }
 
@@ -47,6 +49,9 @@ export function Board() {
     updateNotes,
     addNoteFile,
     removeNoteFile,
+    addHabit,
+    toggleHabit,
+    removeHabit,
     loading, 
     error 
   } = useGoals(slug ?? null)
@@ -158,6 +163,27 @@ export function Board() {
     [dateKey, removeNoteFile]
   )
 
+  const handleAddHabit = useCallback(
+    (title: string, icon?: string) => {
+      addHabit(dateKey, title, icon)
+    },
+    [dateKey, addHabit]
+  )
+
+  const handleToggleHabit = useCallback(
+    (habitId: string) => {
+      toggleHabit(dateKey, habitId)
+    },
+    [dateKey, toggleHabit]
+  )
+
+  const handleRemoveHabit = useCallback(
+    (habitId: string) => {
+      removeHabit(dateKey, habitId)
+    },
+    [dateKey, removeHabit]
+  )
+
   if (loading) {
     return (
       <div className="board-layout">
@@ -236,6 +262,9 @@ export function Board() {
             onAddSubtask={handleAddSubtask}
             onToggleSubtask={handleToggleSubtask}
             onRemoveSubtask={handleRemoveSubtask}
+            onToggleHabit={handleToggleHabit}
+            onRemoveHabit={handleRemoveHabit}
+            onAddHabit={handleAddHabit}
           />
         </div>
       </main>

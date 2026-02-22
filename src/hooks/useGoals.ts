@@ -1,10 +1,28 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { uploadFile, deleteFile } from '../lib/storage'
-import type { DayGoal, GoalsByDate, SectionKind, DsaItem, Subtask, Difficulty, DsaPlatform, NoteFile } from '../types'
+import type { DayGoal, GoalsByDate, SectionKind, DsaItem, Subtask, Difficulty, DsaPlatform, NoteFile, HabitItem } from '../types'
+
+const DEFAULT_HABITS: Omit<HabitItem, 'id'>[] = [
+  { title: 'Workout', icon: '💪', done: false },
+  { title: 'Walk', icon: '🚶', done: false },
+  { title: 'Study 3H', icon: '📚', done: false },
+  { title: '2L Water', icon: '💧', done: false },
+  { title: 'Sunlight', icon: '☀️', done: false },
+  { title: 'Day Skincare', icon: '🧴', done: false },
+  { title: 'Night Skincare', icon: '🌙', done: false },
+  { title: 'Sleep <1:30 AM', icon: '😴', done: false },
+]
+
+function generateDefaultHabits(): HabitItem[] {
+  return DEFAULT_HABITS.map((habit, index) => ({
+    ...habit,
+    id: `default-${index}-${Date.now()}`,
+  }))
+}
 
 function emptyDayGoal(date: string): DayGoal {
-  return { date, videos: [], dsa: [], dev: [], notes: '', noteFiles: [] }
+  return { date, videos: [], dsa: [], dev: [], habits: generateDefaultHabits(), notes: '', noteFiles: [] }
 }
 
 function getOrCreateDay(goals: GoalsByDate, date: string): DayGoal {
@@ -15,6 +33,7 @@ function getOrCreateDay(goals: GoalsByDate, date: string): DayGoal {
       videos: [...existing.videos],
       dsa: [...existing.dsa.map(d => ({ ...d }))],
       dev: [...existing.dev.map(d => ({ ...d, subtasks: d.subtasks ? [...d.subtasks] : [] }))],
+      habits: existing.habits ? [...existing.habits.map(h => ({ ...h }))] : [],
       notes: existing.notes ?? '',
       noteFiles: existing.noteFiles ? [...existing.noteFiles] : [],
     }
@@ -303,6 +322,50 @@ export function useGoals(slug: string | null) {
     [goals, updateDay]
   )
 
+  // Habit methods
+  const addHabit = useCallback(
+    (date: string, title: string, icon?: string) => {
+      const day = getOrCreateDay(goals, date)
+      const newHabit: HabitItem = {
+        id: generateId(),
+        title,
+        icon,
+        done: false,
+      }
+      day.habits = [...(day.habits || []), newHabit]
+      updateDay(date, { ...day })
+    },
+    [goals, updateDay]
+  )
+
+  const toggleHabit = useCallback(
+    (date: string, habitId: string) => {
+      const day = getOrCreateDay(goals, date)
+      const now = new Date().toISOString()
+      
+      day.habits = (day.habits || []).map((h) => {
+        if (h.id !== habitId) return h
+        const newDone = !h.done
+        return {
+          ...h,
+          done: newDone,
+          completedAt: newDone ? now : undefined,
+        }
+      })
+      updateDay(date, { ...day })
+    },
+    [goals, updateDay]
+  )
+
+  const removeHabit = useCallback(
+    (date: string, habitId: string) => {
+      const day = getOrCreateDay(goals, date)
+      day.habits = (day.habits || []).filter((h) => h.id !== habitId)
+      updateDay(date, { ...day })
+    },
+    [goals, updateDay]
+  )
+
   return { 
     goals, 
     getDayGoal, 
@@ -317,6 +380,9 @@ export function useGoals(slug: string | null) {
     updateNotes,
     addNoteFile,
     removeNoteFile,
+    addHabit,
+    toggleHabit,
+    removeHabit,
     loading, 
     error 
   }
